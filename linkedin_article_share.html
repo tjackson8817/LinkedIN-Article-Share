@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LinkedIn Article Share Builder</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --navy:#0f2d3d;
+    --blue:#1b6fa8;
+    --teal:#0f9b8e;
+    --bg:#f4f7f9;
+    --card:#ffffff;
+    --border:#d7e0e5;
+    --text:#1c2b33;
+    --muted:#5b6b73;
+    --tag-bg:#e7f1f7;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+  }
+  header{
+    background:linear-gradient(135deg,var(--navy),var(--blue));
+    color:#fff;
+    padding:24px 32px;
+  }
+  header h1{margin:0 0 4px 0;font-size:22px;}
+  header p{margin:0;opacity:.85;font-size:14px;}
+  .wrap{
+    display:flex;
+    gap:24px;
+    padding:24px;
+    max-width:1400px;
+    margin:0 auto;
+    align-items:flex-start;
+  }
+  .col{flex:1;min-width:0;}
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:20px 22px;
+    margin-bottom:18px;
+  }
+  fieldset{
+    border:1px solid var(--border);
+    border-radius:8px;
+    margin:0 0 18px 0;
+    padding:14px 16px 16px 16px;
+  }
+  legend{font-weight:600;color:var(--navy);padding:0 6px;font-size:14px;}
+  .field{margin-bottom:14px;}
+  label{
+    display:block;
+    font-weight:600;
+    font-size:13.5px;
+    margin-bottom:5px;
+    color:var(--navy);
+  }
+  .tag{
+    background:var(--tag-bg);
+    color:var(--blue);
+    font-size:10.5px;
+    font-weight:600;
+    padding:2px 7px;
+    border-radius:10px;
+    margin-left:6px;
+    text-transform:uppercase;
+    letter-spacing:.3px;
+  }
+  .hint{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4;}
+  input[type=text], textarea, select{
+    width:100%;
+    padding:9px 10px;
+    border:1px solid var(--border);
+    border-radius:6px;
+    font-size:14px;
+    font-family:inherit;
+    background:#fcfdfe;
+  }
+  textarea{resize:vertical;min-height:64px;}
+  .radio-row{display:flex;gap:18px;flex-wrap:wrap;margin-top:2px;}
+  .radio-opt{display:flex;align-items:center;gap:6px;font-size:13.5px;}
+  .radio-opt input{width:auto;}
+  #outputPanel{position:sticky;top:24px;}
+  #promptText{
+    white-space:pre-wrap;
+    font-family:"SFMono-Regular",Consolas,Menlo,monospace;
+    font-size:12.5px;
+    background:#0f2d3d;
+    color:#dff1ec;
+    padding:16px;
+    border-radius:8px;
+    max-height:560px;
+    overflow-y:auto;
+    line-height:1.5;
+  }
+  .btn-row{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+  button{
+    cursor:pointer;
+    border:none;
+    border-radius:6px;
+    padding:9px 16px;
+    font-size:13.5px;
+    font-weight:600;
+    font-family:inherit;
+  }
+  .btn-primary{background:var(--teal);color:#fff;}
+  .btn-primary:hover{background:#0c8579;}
+  .btn-secondary{background:var(--tag-bg);color:var(--blue);}
+  .btn-secondary:hover{background:#d9e9f2;}
+  #placeholder{color:var(--muted);font-style:italic;font-size:13.5px;}
+  .banner{
+    background:#fff7e0;
+    border:1px solid #f0d98c;
+    border-radius:8px;
+    padding:12px 14px;
+    font-size:12.5px;
+    color:#5b4a1a;
+    line-height:1.5;
+    margin-bottom:18px;
+  }
+  .banner b{color:#3d3113;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>LinkedIn Article Share Builder</h1>
+  <p>Finds the 3 most on-brand, recent articles worth sharing — you pick one, the tool drafts the post and (optionally) the artwork.</p>
+</header>
+
+<div class="wrap">
+  <div class="col">
+
+    <div class="banner">
+      <b>Fifth tool in this family, but a different shape.</b> This one isn't part of the job-search funnel — it's for staying visible on LinkedIn between job-search activity. Useful for job hunters and non-job-hunters alike.
+    </div>
+
+    <div class="card">
+      <fieldset>
+        <legend>1 · What counts as "on-brand"</legend>
+        <div class="field">
+          <label>Brand keywords / topics</label>
+          <textarea id="keywords" placeholder="e.g. OT cybersecurity, ICS security, critical infrastructure, industrial control systems"></textarea>
+          <p class="hint">This is what makes "impactful" mean something specific to you rather than generic trending news — be as specific as your actual niche.</p>
+        </div>
+        <div class="field">
+          <label>How recent?</label>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="recency" value="24"> Last 24 hours</label>
+            <label class="radio-opt"><input type="radio" name="recency" value="48"> Last 48 hours</label>
+            <label class="radio-opt"><input type="radio" name="recency" value="3days" checked> Last 3 days</label>
+            <label class="radio-opt"><input type="radio" name="recency" value="week"> Last week</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Who's this for? <span class="tag">optional</span></label>
+          <input type="text" id="audience" placeholder="e.g. potential clients, recruiters/hiring managers, peers in the field">
+          <p class="hint">Shapes which angle counts as impactful — a recruiter-facing post and a client-facing post can reasonably favor different picks from the same pool.</p>
+        </div>
+        <div class="field">
+          <label>Sources to prioritize or avoid <span class="tag">optional</span></label>
+          <textarea id="sources" placeholder="e.g. prioritize: Dark Reading, SecurityWeek, CISA advisories. avoid: low-quality aggregator sites"></textarea>
+        </div>
+        <div class="field">
+          <label>Already covered recently <span class="tag">optional</span></label>
+          <textarea id="recentTopics" placeholder="Paste URLs or topics from your last few posts, so this run doesn't repeat something you already shared"></textarea>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>2 · Your brand identity <span class="tag">set once, reused every time</span></legend>
+        <div class="field">
+          <label>Your name</label>
+          <input type="text" id="brandName" placeholder="e.g. Tom Jackson">
+        </div>
+        <div class="field">
+          <label>Your tagline</label>
+          <input type="text" id="brandTagline" placeholder="e.g. OT Cybersecurity Leader">
+        </div>
+        <div class="field">
+          <label>Eyebrow line <span class="tag">optional</span></label>
+          <input type="text" id="eyebrow" placeholder="Defaults to 'WORTH YOUR ATTENTION' if left blank">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>3 · Options</legend>
+        <div class="field">
+          <label>Generate artwork?</label>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="genArt" value="yes" checked> Yes</label>
+            <label class="radio-opt"><input type="radio" name="genArt" value="no"> No</label>
+          </div>
+          <p class="hint">Downloadable .png in the same visual style used across this tool family. Requires Code execution and file creation to be enabled.</p>
+        </div>
+        <div class="field">
+          <label>Generate hashtags?</label>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="genHashtags" value="yes" checked> Yes</label>
+            <label class="radio-opt"><input type="radio" name="genHashtags" value="no"> No</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>End the post with a question?</label>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="genQuestion" value="yes"> Yes</label>
+            <label class="radio-opt"><input type="radio" name="genQuestion" value="no" checked> No</label>
+          </div>
+          <p class="hint">Off by default — a question at the end drives comments, but overusing it across every post starts to read as engagement-bait. Turn it on deliberately when you want to space one in.</p>
+        </div>
+      </fieldset>
+
+      <div class="banner">
+        <b>Built-in honesty guardrails, not optional:</b> only real, verifiable articles with real URLs — no invented sources. Every summary is written fresh in Claude's own words, never copied from the source. If genuinely on-brand, recent, free-to-read articles are thin on a given day, the tool says so rather than padding the list to fill 3 slots.
+      </div>
+    </div>
+  </div>
+
+  <div class="col" id="outputPanel">
+    <div class="card">
+      <div class="btn-row">
+        <button class="btn-primary" id="copyBtn">Copy prompt</button>
+        <button class="btn-secondary" id="downloadBtn">Download .txt</button>
+      </div>
+      <div id="promptText"><span id="placeholder">Fill in your brand keywords to see your prompt appear here.</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const promptTextEl = document.getElementById('promptText');
+
+function val(id){ return document.getElementById(id).value.trim(); }
+function radioVal(name){
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? el.value : '';
+}
+
+function recencyLabel(v){
+  if(v === '24') return 'published within the last 24 hours';
+  if(v === '48') return 'published within the last 48 hours';
+  if(v === 'week') return 'published within the last week';
+  return 'published within the last 3 days';
+}
+
+function buildPrompt(){
+  const keywords = val('keywords');
+  const recency = radioVal('recency');
+  const audience = val('audience');
+  const sources = val('sources');
+  const recentTopics = val('recentTopics');
+  const brandName = val('brandName') || '[your name]';
+  const brandTagline = val('brandTagline') || '[your tagline]';
+  const eyebrow = val('eyebrow') || 'WORTH YOUR ATTENTION';
+  const genArt = radioVal('genArt') !== 'no';
+  const genHashtags = radioVal('genHashtags') !== 'no';
+  const genQuestion = radioVal('genQuestion') === 'yes';
+
+  if(!keywords){
+    return null;
+  }
+
+  let lines = [];
+  lines.push(`I want you to find real, current articles worth sharing on LinkedIn, matched to my brand, and draft the post (and optionally the artwork) for the best one.`);
+  lines.push("");
+  lines.push(`- Brand keywords/topics: ${keywords}`);
+  lines.push(`- Recency: only consider articles ${recencyLabel(recency)}.`);
+  if(audience) lines.push(`- Who this is for: ${audience} — let this shape which angle counts as most impactful.`);
+  if(sources) lines.push(`- Source guidance: ${sources}`);
+  if(recentTopics){
+    lines.push(`- Already covered recently (don't repeat these or something too similar): ${recentTopics}`);
+  }
+
+  lines.push("");
+  lines.push(`CRITICAL — read before responding: only report real, verifiable, currently findable articles, each with a real working URL. Never invent an article, a source, or a URL. For each candidate, make a good-faith check on whether it's free to read (not hard-paywalled) and say so plainly — flag it as "likely free" or "uncertain" rather than asserting certainty you can't actually verify. If genuinely on-brand, recent, free-to-read articles are thin today, say so honestly rather than padding the list with weak or off-brand picks to reach 3.`);
+  lines.push("");
+  lines.push(`Also treat these as hard requirements:`);
+  lines.push(`- The 3 picks must be 3 distinct stories, not the same underlying event covered by 3 different outlets. If your search turns up near-duplicate coverage of one story, note that explicitly and either pick the best single source for it or substitute a genuinely different story for the other slot(s).`);
+  lines.push(`- Every summary must be written fresh in your own words — never copied or lightly reworded from the source text.`);
+  lines.push(`- No markdown formatting (no asterisks, no pound signs, etc.) in the final post text — LinkedIn doesn't render markdown, so it would show up as literal stray characters. Plain text only.`);
+
+  lines.push("");
+  lines.push(`Step 1 — find candidates and present the top 3, each with:`);
+  lines.push(`1. Headline/title of the article`);
+  lines.push(`2. Source and published date/time (as specific as the source states)`);
+  lines.push(`3. URL`);
+  lines.push(`4. Free-to-read assessment (Likely free / Paywalled / Uncertain)`);
+  lines.push(`5. One line of reasoning — why this made the top 3 for my brand and stated audience, referencing the actual keywords/angle that made it relevant`);
+
+  lines.push("");
+  lines.push(`Step 2 — once I tell you which of the 3 to use, draft the actual LinkedIn post:`);
+  lines.push(`1. Article URL`);
+  lines.push(`2. A short, personal one-sentence hook/take — my own angle on why this matters, not just a restatement of the headline`);
+  lines.push(`3. A one-sentence summary of the article, in your own words`);
+  if(genHashtags){
+    lines.push(`4. 3-5 relevant hashtags, generated from the actual article content and my brand keywords above`);
+  }
+  if(genQuestion){
+    lines.push(`5. End the post with a genuine, specific question related to the article — not a generic "what do you think?" tacked on, something that actually invites a substantive reply.`);
+  } else {
+    lines.push(`5. End on a statement, not a question — do not add a "what are your thoughts?" style closer.`);
+  }
+  lines.push(`Present this as plain text, ready to copy directly into LinkedIn's post box.`);
+
+  if(genArt){
+    lines.push("");
+    lines.push(`Step 3 — also build a downloadable artwork image (.png, 1200x630) for this post, matching this exact visual template:`);
+    lines.push(`- Dark navy background (#0f2d3d to #0a1f2b gradient) with a subtle hexagon line pattern overlay, and a teal-to-blue gradient accent bar (#0f9b8e to #1b6fa8) across the very top edge.`);
+    lines.push(`- Eyebrow text, top left, teal (#0f9b8e), bold, letter-spaced: "${eyebrow}"`);
+    lines.push(`- Subtitle beneath it, smaller, lighter blue (#7fa8bd): "${brandTagline} — Shared Read"`);
+    lines.push(`- Below that, a bold white headline (2 lines max) using the personal hook/take from Step 2 — reworded to fit as a short punchy headline if needed`);
+    lines.push(`- A thin teal divider line`);
+    lines.push(`- A bordered card containing the one-sentence article summary in light text, plus a smaller line below it noting the source and "Free to read" status`);
+    lines.push(`- If hashtags were generated, small rounded pill shapes along the bottom of the card area showing 3-4 of them`);
+    lines.push(`- Footer, bottom left: "${brandName}" in bold, "${brandTagline}" beneath it in lighter text`);
+    lines.push(`- Use whatever image-generation approach is available to you (e.g. building the design as SVG or HTML and rendering it, or an equivalent method) to produce the final .png — the important part is matching this layout and color scheme exactly, not the specific tool used to render it.`);
+  }
+
+  return lines.join("\n");
+}
+
+function render(){
+  const prompt = buildPrompt();
+  if(prompt === null){
+    promptTextEl.innerHTML = '<span id="placeholder">Fill in your brand keywords to see your prompt appear here.</span>';
+  } else {
+    promptTextEl.textContent = prompt;
+  }
+}
+
+document.querySelectorAll('input, textarea').forEach(el => {
+  el.addEventListener('input', render);
+  el.addEventListener('change', render);
+});
+
+document.getElementById('copyBtn').addEventListener('click', () => {
+  const prompt = buildPrompt();
+  if(!prompt) return;
+  navigator.clipboard.writeText(prompt).then(() => {
+    const btn = document.getElementById('copyBtn');
+    const original = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = original, 1500);
+  }).catch(() => {
+    alert('Clipboard blocked by your browser — use the Download .txt button instead.');
+  });
+});
+
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  const prompt = buildPrompt();
+  if(!prompt) return;
+  const blob = new Blob([prompt], {type: 'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'linkedin_article_share_prompt.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+render();
+</script>
+</body>
+</html>
