@@ -41,8 +41,8 @@ Three fields — **Your name**, **Your tagline**, and an optional **Eyebrow line
 
 | Toggle | Default | What it does |
 |---|---|---|
-| **Generate artwork?** | Yes | Produces a downloadable `.png` (1200×630) in the same visual identity used across this tool family — dark navy background, teal/blue accents, your name and tagline in the footer. |
-| **Generate hashtags?** | Yes | 3–5 hashtags generated from the actual article content and your brand keywords — not generic tags, ones tied to what the specific article is about. |
+| **Generate artwork?** | Yes | Produces a downloadable `.png` (1200×630) in the same visual identity used across this tool family — dark navy background, teal/blue accents, your name and tagline in the footer. The generated prompt explicitly instructs Claude to render this using Python's Pillow library and save a real file, rather than just describing the design, since leaving the rendering method unspecified was found to sometimes result in no actual file being produced. |
+| **Generate hashtags?** | Yes | 3–5 hashtags generated from the actual article content and your brand keywords — shown for **all 3 candidates in Step 1**, not just whichever one you end up picking, so you can factor likely hashtags into your choice. The same set carries through unchanged into the final Step 2 post. |
 | **End the post with a question?** | **No** | Off by default, deliberately. A question at the end genuinely does drive more comments — but overusing it across every single post starts to read as engagement-bait rather than a real invitation to discuss. Turn it on when you specifically want to space one in, rather than leaving it on by default for every post. |
 
 ---
@@ -62,8 +62,8 @@ Same discipline as every other tool in this suite, adapted to what this one prod
 
 ## 5. How It Actually Runs — Two Steps
 
-1. **Step 1**: Claude presents the top 3 candidates — headline, source, published date/time, URL, a free-to-read assessment, and one line of reasoning for why each made the cut for your brand and audience.
-2. **Step 2**: once you tell Claude which of the 3 to use, it drafts the actual post — URL, personal hook, summary, hashtags (if on), and either a closing question (if on) or a plain closing statement.
+1. **Step 1**: Claude presents the top 3 candidates — headline, source, published date/time, URL, a free-to-read assessment, one line of reasoning for why each made the cut, and (if hashtags are on) 3–5 hashtags for each candidate, so you can weigh likely hashtags into your choice rather than only seeing them after you've already picked.
+2. **Step 2**: once you tell Claude which of the 3 to use, it drafts the actual post — URL, personal hook, summary, the same hashtags already generated for that article in Step 1 (not regenerated), and either a closing question (if on) or a plain closing statement.
 
 If artwork is enabled, **Step 3** builds the matching image, following the exact visual template embedded in the generated prompt (colors, layout, and your brand identity fields), so every post's artwork stays visually consistent even though the headline, summary, and hashtags are different each time.
 
@@ -92,6 +92,7 @@ If artwork is enabled, **Step 3** builds the matching image, following the exact
 | Problem | Fix |
 |---|---|
 | Prompt panel just shows placeholder text | You need at least Brand keywords/topics filled in. |
-| No artwork came back | Confirm Code execution and file creation is enabled — without it, Claude can only produce the text. |
+| No artwork came back | Confirm Code execution and file creation is enabled. The prompt now explicitly directs Claude to render the image with Pillow and save a real file rather than just describe it — if it still doesn't produce one, ask directly for it to save the .png to the outputs folder and confirm the file exists. |
 | All 3 picks feel off-brand or repetitive | Narrow your brand keywords, or widen the recency window if genuinely on-brand coverage was thin that day. |
 | Post has stray asterisks or pound signs when pasted into LinkedIn | This shouldn't happen given the no-markdown instruction — if it does, ask Claude directly to strip any markdown formatting before you copy it. |
+| In ChatGPT (or another tool), it responds with a plan/recommendations instead of just running the task | The generated prompt now opens with an explicit "execute this directly, don't just describe a plan" instruction specifically to head this off — if it still happens, you can restate that instruction even more bluntly in your own words as a follow-up message. |

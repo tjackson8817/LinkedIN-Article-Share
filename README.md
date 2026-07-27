@@ -41,3 +41,4 @@ Only real, verifiable, currently findable articles with real URLs — never an i
 
 - This repo can be public or private — GitHub Pages on the free tier requires a public repo (or a paid plan for private-repo Pages).
 - Requires Claude's **Web search** capability (the entire tool depends on live search) and **Code execution and file creation** if artwork generation is enabled.
+- The generated prompt opens with an explicit "execute this directly, don't just outline a plan" instruction, aimed at other AI tools (e.g. ChatGPT) that sometimes respond with recommendations instead of just running the task.

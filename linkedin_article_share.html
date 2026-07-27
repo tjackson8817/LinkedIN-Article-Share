@@ -292,6 +292,9 @@ function buildPrompt(){
   lines.push(`3. URL`);
   lines.push(`4. Free-to-read assessment (Likely free / Paywalled / Uncertain)`);
   lines.push(`5. One line of reasoning — why this made the top 3 for my brand and stated audience, referencing the actual keywords/angle that made it relevant`);
+  if(genHashtags){
+    lines.push(`6. 3-5 relevant hashtags for this specific article, generated from its actual content and my brand keywords above — so I can see likely hashtags for all 3 candidates before I pick one, not just for whichever one I end up choosing`);
+  }
 
   lines.push("");
   lines.push(`Step 2 — once I tell you which of the 3 to use, draft the actual LinkedIn post:`);
@@ -299,7 +302,7 @@ function buildPrompt(){
   lines.push(`2. A short, personal one-sentence hook/take — my own angle on why this matters, not just a restatement of the headline`);
   lines.push(`3. A one-sentence summary of the article, in your own words`);
   if(genHashtags){
-    lines.push(`4. 3-5 relevant hashtags, generated from the actual article content and my brand keywords above`);
+    lines.push(`4. The same 3-5 hashtags already generated for this article in Step 1 — reuse them rather than regenerating a different set, so the hashtags stay consistent between the candidate preview and the final post`);
   }
   if(genQuestion){
     lines.push(`5. End the post with a genuine, specific question related to the article — not a generic "what do you think?" tacked on, something that actually invites a substantive reply.`);
@@ -319,7 +322,7 @@ function buildPrompt(){
     lines.push(`- A bordered card containing the one-sentence article summary in light text, plus a smaller line below it noting the source and "Free to read" status`);
     lines.push(`- If hashtags were generated, small rounded pill shapes along the bottom of the card area showing 3-4 of them`);
     lines.push(`- Footer, bottom left: "${brandName}" in bold, "${brandTagline}" beneath it in lighter text`);
-    lines.push(`- Use whatever image-generation approach is available to you (e.g. building the design as SVG or HTML and rendering it, or an equivalent method) to produce the final .png — the important part is matching this layout and color scheme exactly, not the specific tool used to render it.`);
+    lines.push(`CRITICAL — build this using your code execution environment, not just a description: use Python's Pillow (PIL) library to draw the image directly onto a 1200x630 canvas (Image.new + ImageDraw) — rectangles and rounded-rectangles for the background/accent bar/card/pills, ImageDraw.text (or textbbox for sizing) for all text elements, using a standard font bundled with the system or a common one you load explicitly. If Pillow isn't already available, install it first (pip install Pillow --break-system-packages). Do not stop at generating SVG or HTML code alone, and do not just describe the design in words — actually render the pixels and save a real .png file to /mnt/user-data/outputs/, then confirm in your response that the file was created and is available to download. If you hit a rendering error, fix it and retry rather than falling back to only describing what the image would look like.`);
   }
 
   return lines.join("\n");
