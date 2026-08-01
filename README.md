@@ -1,6 +1,6 @@
 # LinkedIn Article Share Builder
 
-A single self-contained HTML tool that finds the 3 most on-brand, recent articles worth sharing on LinkedIn, then drafts the post — and optionally the artwork — for whichever one you pick.
+A single self-contained HTML tool that finds the 5 most on-brand, recent articles worth sharing on LinkedIn, automatically ranks them, then drafts the post — and optionally the artwork — for whichever one you pick.
 
 **[Open the live tool](https://tjackson8817.github.io/LinkedIN-Article-Share/linkedin_article_share.html)**
 
@@ -31,14 +31,18 @@ This is the fifth tool alongside:
 3. Fill in your name/tagline once (reused every time after that).
 4. Set your toggles — artwork, hashtags, closing question.
 5. Copy the generated prompt and paste it into a new Claude chat.
-6. Review the top 3 candidates and their reasoning, pick one, and review the drafted post (and artwork, if generated) before posting.
+6. Review the ranked top 5 candidates and reasoning, pick one, and review the drafted post (and artwork, if generated) before posting.
 
 ## The honesty guardrails
 
-Only real, verifiable, currently findable articles with real URLs — never an invented source. A good-faith paywall check, honestly flagged as "Likely free," "Paywalled," or "Uncertain" rather than false confidence. If genuinely on-brand articles are thin on a given day, the tool says so rather than padding the list. The 3 picks must be 3 distinct stories, not the same event covered by three outlets. Every summary is written fresh, never copied from the source. No markdown formatting in the output, since LinkedIn doesn't render it.
+Only real, verifiable, currently findable articles with real URLs — never an invented source. A good-faith paywall check, honestly flagged as "Likely free," "Paywalled," or "Uncertain" rather than false confidence. If genuinely on-brand articles are thin on a given day, the tool reports fewer than 5 and says so rather than padding the list. The picks must be distinct stories, not the same event covered by multiple outlets. Every summary is written fresh, never copied from the source. No markdown formatting anywhere in the output, since LinkedIn doesn't render it.
+
+## Output format
+
+Each candidate, and the final drafted post, is presented as a clean three-line "ready to copy" block — `URL`, `Summary`/`Post`, `Hashtags` — so it can be selected and pasted straight into LinkedIn without cleanup.
 
 ## Notes
 
 - This repo can be public or private — GitHub Pages on the free tier requires a public repo (or a paid plan for private-repo Pages).
-- Requires Claude's **Web search** capability (the entire tool depends on live search) and **Code execution and file creation** if artwork generation is enabled.
-- The generated prompt opens with an explicit "execute this directly, don't just outline a plan" instruction, aimed at other AI tools (e.g. ChatGPT) that sometimes respond with recommendations instead of just running the task.
+- Requires web search capability in whatever AI chat tool runs the prompt (the entire tool depends on live search), and Claude's **Code execution and file creation** specifically if artwork generation is enabled — that step is Claude-only and won't produce a real image file in ChatGPT or other tools.
+- The generated prompt opens with an explicit "execute this now — don't ask clarifying questions, don't just outline a plan" instruction, aimed at AI tools (e.g. ChatGPT) that sometimes respond with questions or recommendations instead of just running the task.

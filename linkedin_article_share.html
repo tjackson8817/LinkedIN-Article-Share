@@ -131,7 +131,7 @@
 
 <header>
   <h1>LinkedIn Article Share Builder</h1>
-  <p>Finds the 3 most on-brand, recent articles worth sharing — you pick one, the tool drafts the post and (optionally) the artwork.</p>
+  <p>Finds the 5 most on-brand, recent articles worth sharing — ranked automatically — you pick one, the tool drafts the post and (optionally) the artwork.</p>
 </header>
 
 <div class="wrap">
@@ -197,7 +197,7 @@
             <label class="radio-opt"><input type="radio" name="genArt" value="yes" checked> Yes</label>
             <label class="radio-opt"><input type="radio" name="genArt" value="no"> No</label>
           </div>
-          <p class="hint">Downloadable .png in the same visual style used across this tool family. Requires Code execution and file creation to be enabled.</p>
+          <p class="hint">Downloadable .png in the same visual style used across this tool family. <b>Only works in Claude</b> with Code execution and file creation enabled — ChatGPT and most other chat tools have no equivalent way to run this from a pasted prompt, so no image will come back if you paste this there, regardless of wording.</p>
         </div>
         <div class="field">
           <label>Generate hashtags?</label>
@@ -267,6 +267,8 @@ function buildPrompt(){
   }
 
   let lines = [];
+  lines.push(`EXECUTE THIS NOW — do not ask me clarifying questions and do not respond with a plan, an outline, or a list of "things I'll need to know first." Everything you need is below. Where something genuinely isn't specified, make the most reasonable assumption yourself, note the assumption briefly in one line, and proceed. Search the web now and produce Step 1 in this same response.`);
+  lines.push("");
   lines.push(`I want you to find real, current articles worth sharing on LinkedIn, matched to my brand, and draft the post (and optionally the artwork) for the best one.`);
   lines.push("");
   lines.push(`- Brand keywords/topics: ${keywords}`);
@@ -278,42 +280,49 @@ function buildPrompt(){
   }
 
   lines.push("");
-  lines.push(`CRITICAL — read before responding: only report real, verifiable, currently findable articles, each with a real working URL. Never invent an article, a source, or a URL. For each candidate, make a good-faith check on whether it's free to read (not hard-paywalled) and say so plainly — flag it as "likely free" or "uncertain" rather than asserting certainty you can't actually verify. If genuinely on-brand, recent, free-to-read articles are thin today, say so honestly rather than padding the list with weak or off-brand picks to reach 3.`);
+  lines.push(`CRITICAL — read before responding: only report real, verifiable, currently findable articles, each with a real working URL. Never invent an article, a source, or a URL. For each candidate, make a good-faith check on whether it's free to read (not hard-paywalled) and say so plainly — flag it as "likely free" or "uncertain" rather than asserting certainty you can't actually verify. If genuinely on-brand, recent, free-to-read articles are thin today, report fewer than 5 and say so honestly rather than padding the list with weak or off-brand picks.`);
   lines.push("");
   lines.push(`Also treat these as hard requirements:`);
-  lines.push(`- The 3 picks must be 3 distinct stories, not the same underlying event covered by 3 different outlets. If your search turns up near-duplicate coverage of one story, note that explicitly and either pick the best single source for it or substitute a genuinely different story for the other slot(s).`);
+  lines.push(`- The picks must be distinct stories, not the same underlying event covered by multiple outlets. If your search turns up near-duplicate coverage of one story, note that explicitly and either pick the best single source for it or substitute a genuinely different story for the other slot(s).`);
   lines.push(`- Every summary must be written fresh in your own words — never copied or lightly reworded from the source text.`);
-  lines.push(`- No markdown formatting (no asterisks, no pound signs, etc.) in the final post text — LinkedIn doesn't render markdown, so it would show up as literal stray characters. Plain text only.`);
+  lines.push(`- No markdown formatting (no asterisks, no pound signs, etc.) anywhere in the output — LinkedIn doesn't render markdown, so it would show up as literal stray characters. Plain text only.`);
 
   lines.push("");
-  lines.push(`Step 1 — find candidates and present the top 3, each with:`);
-  lines.push(`1. Headline/title of the article`);
-  lines.push(`2. Source and published date/time (as specific as the source states)`);
-  lines.push(`3. URL`);
-  lines.push(`4. Free-to-read assessment (Likely free / Paywalled / Uncertain)`);
-  lines.push(`5. One line of reasoning — why this made the top 3 for my brand and stated audience, referencing the actual keywords/angle that made it relevant`);
+  lines.push(`Step 1 — find candidates, rank them yourself, and present the top 5 in ranked order (best first). Do the ranking automatically using these criteria, weighed together rather than any single one deciding it: (a) how directly the article's actual content matches my brand keywords/topics above, not just a surface keyword hit; (b) recency within the window given; (c) source quality/credibility; (d) likely shareability — would this genuinely prompt a reaction or discussion from ${audience || 'my professional network'}; (e) distinctiveness from the other candidates and from what I've already posted recently. Briefly state the rank order logic in one line before listing them.`);
+  lines.push("");
+  lines.push(`For EACH of the 5 candidates, use this exact two-part format so it's easy to scan and copy:`);
+  lines.push("");
+  lines.push(`[Context — for you to read, not to copy]`);
+  lines.push(`Headline: ...`);
+  lines.push(`Source / published: ...`);
+  lines.push(`Free-to-read: Likely free / Paywalled / Uncertain`);
+  lines.push(`Why it ranked here: one line, referencing the actual keywords/angle that made it relevant`);
+  lines.push("");
+  lines.push(`[Ready to copy]`);
+  lines.push(`URL: <the article URL, alone on its own line>`);
+  lines.push(`Summary: <one sentence, LinkedIn-post-ready, written fresh in your own words, no markdown>`);
   if(genHashtags){
-    lines.push(`6. 3-5 relevant hashtags for this specific article, generated from its actual content and my brand keywords above — so I can see likely hashtags for all 3 candidates before I pick one, not just for whichever one I end up choosing`);
+    lines.push(`Hashtags: <3-5 relevant hashtags for this specific article, generated from its actual content and my brand keywords above, space-separated on one line>`);
   }
+  lines.push(`Keep the "Ready to copy" block exactly three lines (URL, then Summary, then Hashtags) with no extra commentary mixed in, so I can select and paste just that block directly.`);
 
   lines.push("");
-  lines.push(`Step 2 — once I tell you which of the 3 to use, draft the actual LinkedIn post:`);
-  lines.push(`1. Article URL`);
-  lines.push(`2. A short, personal one-sentence hook/take — my own angle on why this matters, not just a restatement of the headline`);
-  lines.push(`3. A one-sentence summary of the article, in your own words`);
+  lines.push(`Step 2 — once I tell you which of the 5 to use, draft the actual LinkedIn post using this same "Ready to copy" shape, expanded slightly:`);
+  lines.push(`URL: <article URL>`);
+  lines.push(`Post: <a short personal hook/take in your own angle, then a one-sentence summary in your own words, combined into one tight LinkedIn-ready paragraph — no markdown>`);
   if(genHashtags){
-    lines.push(`4. The same 3-5 hashtags already generated for this article in Step 1 — reuse them rather than regenerating a different set, so the hashtags stay consistent between the candidate preview and the final post`);
+    lines.push(`Hashtags: <the same hashtags already generated for this article in Step 1 — reuse them rather than regenerating a different set>`);
   }
   if(genQuestion){
-    lines.push(`5. End the post with a genuine, specific question related to the article — not a generic "what do you think?" tacked on, something that actually invites a substantive reply.`);
+    lines.push(`End the "Post" line with a genuine, specific question related to the article — not a generic "what do you think?" tacked on, something that actually invites a substantive reply.`);
   } else {
-    lines.push(`5. End on a statement, not a question — do not add a "what are your thoughts?" style closer.`);
+    lines.push(`End the "Post" line on a statement, not a question — do not add a "what are your thoughts?" style closer.`);
   }
-  lines.push(`Present this as plain text, ready to copy directly into LinkedIn's post box.`);
+  lines.push(`Present this as plain text, in that exact URL / Post / Hashtags order, ready to copy straight into LinkedIn's post box.`);
 
   if(genArt){
     lines.push("");
-    lines.push(`Step 3 — also build a downloadable artwork image (.png, 1200x630) for this post, matching this exact visual template:`);
+    lines.push(`Step 3 — also build a downloadable artwork image (.png, 1200x630) for this post, matching this exact visual template. (Note: this step requires an environment with code execution and file creation, i.e. Claude with those capabilities enabled — if you are not able to execute code and save a real file, say so plainly instead of describing an image that won't actually exist as a file.)`);
     lines.push(`- Dark navy background (#0f2d3d to #0a1f2b gradient) with a subtle hexagon line pattern overlay, and a teal-to-blue gradient accent bar (#0f9b8e to #1b6fa8) across the very top edge.`);
     lines.push(`- Eyebrow text, top left, teal (#0f9b8e), bold, letter-spaced: "${eyebrow}"`);
     lines.push(`- Subtitle beneath it, smaller, lighter blue (#7fa8bd): "${brandTagline} — Shared Read"`);
