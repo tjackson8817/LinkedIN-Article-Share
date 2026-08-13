@@ -1,0 +1,57 @@
+EXECUTE THIS NOW — do not ask me clarifying questions and do not respond with a plan, an outline, or a list of "things I'll need to know first." Everything you need is below. Where something genuinely isn't specified, make the most reasonable assumption yourself, note the assumption briefly in one line, and proceed. Search the web now and produce Step 1 in full, in this same response.
+
+I want you to find real, current articles worth sharing on LinkedIn, matched to my brand, and draft two genuinely different post options for each of the top 3 — I'll pick my favorite of the 6 myself, so give me real choices, not one draft to approve.
+
+- Brand keywords/topics: OT cybersecurity, ICS security, critical infrastructure, industrial control systems
+- Recency: only consider articles published within the last 3 days.
+- Who this is for: potential clients and peers in industrial cybersecurity — let this shape which angle counts as most impactful.
+- Ongoing themes I'm building a position on: the gap between compliance-driven risk assessments and actual operational resilience — favor articles that let me connect to one of these throughlines where a genuine connection exists, rather than treating every pick as a one-off.
+- My background/expertise:
+Tom Jackson - 15+ years in OT cybersecurity consulting and practice-building. Founded and scaled EY global OT cybersecurity practice from zero to $10-30M pipeline. Principal Consultant then Director at Schneider Electric with full P&L accountability. Built Accenture global OT cybersecurity capability. Currently Senior Manager, OT Cybersecurity at Booz Allen Hamilton.
+
+CRITICAL — read before responding: only report real, verifiable, currently findable articles, each with a real working URL. Never invent an article, a source, or a URL. For each candidate, make a good-faith check on whether it's free to read (not hard-paywalled) and say so plainly — flag it as "likely free," "paywalled," or "uncertain" rather than asserting certainty you can't actually verify. If genuinely on-brand, recent, free-to-read articles are thin today, report fewer than 3 and say so honestly rather than padding the list with weak or off-brand picks.
+
+Also treat these as hard requirements:
+- The 3 picks must be distinct stories, not the same underlying event covered by multiple outlets. If your search turns up near-duplicate coverage of one story, note that explicitly and substitute a genuinely different story rather than quietly presenting several versions of the same news.
+- Every summary must be written fresh in your own words — never copied or lightly reworded from the source text.
+- No markdown formatting (no asterisks, no pound signs, etc.) anywhere in the output — LinkedIn doesn't render markdown, so it would show up as literal stray characters. Plain text only.
+- Do not invent anything about me beyond what I've actually told you above — the Position/Stance variant leans on real background/themes if given, and stays general if not, but never fabricates a claim, credential, or experience either way.
+
+Step 1 — find candidates, rank them yourself, and narrow to the top 3 (not 5 — this tool intentionally works with fewer, more fully-developed options rather than a longer list of thin ones). Do the ranking automatically using these criteria, weighed together rather than any single one deciding it: (a) how directly the article's actual content matches my brand keywords/topics above, not just a surface keyword hit; (b) recency within the window given; (c) source quality/credibility; (d) likely shareability — would this genuinely prompt a reaction or discussion from potential clients and peers in industrial cybersecurity; (e) distinctiveness from the other candidates and from what I've already posted recently. Briefly state the rank order logic in one line before listing them.
+
+For EACH of the 3 candidates, present:
+
+[Context — for you to read, not to copy]
+Headline: ...
+Source / published: ...
+Free-to-read: Likely free / Paywalled / Uncertain
+Why it ranked here: one line, referencing the actual keywords/angle that made it relevant
+
+Then BOTH of these fully drafted post variants for this article — not a summary of what they'd contain, the actual finished text for each:
+
+Variant A — Informational Share:
+URL: <the article URL, alone on its own line>
+Post: <a short, factual summary in your own words — typically one sentence, never more than two — with little to no personal commentary. This is the safe, high-frequency default: genuinely useful information, not a stance. End on a statement, not a question.>
+Hashtags: <3-5 hashtags for this specific article, generated from its actual content and my brand keywords, space-separated on one line>
+
+Variant B — Position/Stance:
+URL: <the article URL, alone on its own line>
+Post: <a real take grounded strictly in my background/themes above (agree, disagree, extend the argument, connect it to a pattern, make a prediction — an actual position, not just a reaction), with the article's core point folded in tightly rather than presented as a separate summary. Close on a genuine, specific question OR a strong statement — whichever is rhetorically the stronger move for THIS particular take, decided deliberately rather than defaulting to one or the other out of habit.>
+Hashtags: <3-5 hashtags for this specific article, this time drawing from BOTH the article's content AND my broader background/themes above — the goal is hashtags that help build a recognizable community of interest around my actual expertise over time, not just tags for one article in isolation>
+
+Keep every "Post" block as clean, ready-to-copy plain text — URL, then Post, then Hashtags, no extra commentary mixed into those specific lines.
+
+Once I tell you which of the 6 drafts (3 articles × 2 variants) I want to use, that's the one I'm posting — no further drafting needed unless I ask for changes.
+
+Step 2 — once I've told you which draft I'm using, build a downloadable artwork image (.png, 1200x630) for that specific post, matching this exact visual template. (Note: this step requires an environment with code execution and file creation, i.e. Claude with those capabilities enabled — if you are not able to execute code and save a real file, say so plainly instead of describing an image that won't actually exist as a file.)
+- Dark navy background (#0f2d3d to #0a1f2b gradient) with a subtle hexagon line pattern overlay, and a teal-to-blue gradient accent bar (#0f9b8e to #1b6fa8) across the very top edge.
+- Eyebrow text, top left, teal (#0f9b8e), bold, letter-spaced: "WORTH YOUR ATTENTION"
+- Subtitle beneath it, smaller, lighter blue (#7fa8bd): "OT Cybersecurity Leader — Shared Read"
+- Below that, a bold white headline (2 lines max) built from the chosen post's actual content — its take if Variant B, or its core point if Variant A — reworded to fit as a short punchy headline if needed
+- A thin teal divider line
+- A bordered card containing the article's core point in light text, plus a smaller line below it noting the source and "Free to read" status
+- If hashtags were generated, small rounded pill shapes along the bottom of the card area showing 3-4 of them
+- Footer, bottom left: "Tom Jackson" in bold, "OT Cybersecurity Leader" beneath it in lighter text
+CRITICAL — build this using your code execution environment, not just a description: use Python's Pillow (PIL) library to draw the image directly onto a 1200x630 canvas (Image.new + ImageDraw) — rectangles and rounded-rectangles for the background/accent bar/card/pills, ImageDraw.text (or textbbox for sizing) for all text elements, using a standard font bundled with the system or a common one you load explicitly. If Pillow isn't already available, install it first (pip install Pillow --break-system-packages). Do not stop at generating SVG or HTML code alone, and do not just describe the design in words — actually render the pixels and save a real .png file to /mnt/user-data/outputs/, then confirm in your response that the file was created and is available to download. If you hit a rendering error, fix it and retry rather than falling back to only describing what the image would look like.
+
+Present Step 1 directly in your response, organized by article with both variants clearly labeled underneath each one.

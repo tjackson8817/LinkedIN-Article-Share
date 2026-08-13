@@ -125,27 +125,39 @@
     margin-bottom:18px;
   }
   .banner b{color:#3d3113;}
+  .identity-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
+
+  @media (max-width: 860px){
+    .wrap{flex-direction:column;padding:14px;gap:14px;}
+    #outputPanel{position:static;}
+    #promptText{max-height:340px;font-size:12px;}
+    header{padding:18px 16px;}
+    header h1{font-size:19px;}
+    .card{padding:16px 14px;}
+    .radio-row{gap:12px;}
+    .identity-row{flex-wrap:wrap;}
+  }
 </style>
 </head>
 <body>
 
 <header>
   <h1>LinkedIn Article Share Builder</h1>
-  <p>Finds the 5 most on-brand, recent articles worth sharing — ranked automatically — you pick one, the tool drafts the post and (optionally) the artwork.</p>
+  <p>Finds the top 3 on-brand, recent articles worth sharing — ranked automatically — and drafts two genuinely different posts for each, so you're choosing between real options, not just approving one draft.</p>
 </header>
 
 <div class="wrap">
   <div class="col">
 
     <div class="banner">
-      <b>Fifth tool in this family, but a different shape.</b> This one isn't part of the job-search funnel — it's for staying visible on LinkedIn between job-search activity. Useful for job hunters and non-job-hunters alike.
+      <b>Sixth tool in this family, but a different shape.</b> This one isn't part of the job-search funnel — it's for staying visible on LinkedIn and building a thought-leadership position, between job-search activity or independent of it entirely.
     </div>
 
     <div class="card">
       <fieldset>
         <legend>1 · What counts as "on-brand"</legend>
         <div class="field">
-          <label>Brand keywords / topics</label>
+          <label for="keywords">Brand keywords / topics</label>
           <textarea id="keywords" placeholder="e.g. OT cybersecurity, ICS security, critical infrastructure, industrial control systems"></textarea>
           <p class="hint">This is what makes "impactful" mean something specific to you rather than generic trending news — be as specific as your actual niche.</p>
         </div>
@@ -159,46 +171,57 @@
           </div>
         </div>
         <div class="field">
-          <label>Who's this for? <span class="tag">optional</span></label>
+          <label for="audience">Who's this for? <span class="tag">optional</span></label>
           <input type="text" id="audience" placeholder="e.g. potential clients, recruiters/hiring managers, peers in the field">
           <p class="hint">Shapes which angle counts as impactful — a recruiter-facing post and a client-facing post can reasonably favor different picks from the same pool.</p>
         </div>
         <div class="field">
-          <label>Sources to prioritize or avoid <span class="tag">optional</span></label>
+          <label for="sources">Sources to prioritize or avoid <span class="tag">optional</span></label>
           <textarea id="sources" placeholder="e.g. prioritize: Dark Reading, SecurityWeek, CISA advisories. avoid: low-quality aggregator sites"></textarea>
         </div>
         <div class="field">
-          <label>Already covered recently <span class="tag">optional</span></label>
+          <label for="recentTopics">Already covered recently <span class="tag">optional</span></label>
           <textarea id="recentTopics" placeholder="Paste URLs or topics from your last few posts, so this run doesn't repeat something you already shared"></textarea>
+        </div>
+        <div class="field">
+          <label for="themes">Ongoing themes you're building a position on <span class="tag">optional</span></label>
+          <textarea id="themes" placeholder="e.g. 'convergence of IT and OT security teams' or 'the gap between compliance and actual resilience' — throughlines you keep coming back to"></textarea>
+          <p class="hint">Thought leadership compounds across posts that connect to a few recognizable throughlines, not one-off reactions to whatever's trending. This also feeds the hashtags below, so they help build a consistent community of interest around you, not just tag each article in isolation.</p>
         </div>
       </fieldset>
 
       <fieldset>
-        <legend>2 · Your brand identity <span class="tag">set once, reused every time</span></legend>
+        <legend>2 · Your Brand Identity</legend>
         <div class="field">
-          <label>Your name</label>
+          <label for="brandName">Your name</label>
           <input type="text" id="brandName" placeholder="e.g. Tom Jackson">
         </div>
         <div class="field">
-          <label>Your tagline</label>
+          <label for="brandTagline">Your tagline</label>
           <input type="text" id="brandTagline" placeholder="e.g. OT Cybersecurity Leader">
         </div>
         <div class="field">
-          <label>Eyebrow line <span class="tag">optional</span></label>
+          <label for="eyebrow">Eyebrow line <span class="tag">optional</span></label>
           <input type="text" id="eyebrow" placeholder="Defaults to 'WORTH YOUR ATTENTION' if left blank">
+        </div>
+        <div class="field">
+          <label for="background">Your background / expertise <span class="tag">optional</span></label>
+          <textarea id="background" placeholder="Paste your resume, LinkedIn About section, a short bio, or just a few sentences on your actual experience and angle"></textarea>
+          <p class="hint">This is what grounds the Position/Stance variant below in something real — without it, that variant stays more general rather than inventing a personal claim or credential you didn't give it. See the guardrail note further down.</p>
+        </div>
+        <div class="field">
+          <label>Save or reload this identity</label>
+          <div class="identity-row">
+            <button class="btn-secondary" id="saveBrandBtn" type="button">Save brand identity (.json)</button>
+            <button class="btn-secondary" id="loadBrandBtn" type="button">Load brand identity</button>
+            <input type="file" id="loadBrandFile" accept=".json" style="display:none;">
+          </div>
+          <p class="hint">These fields aren't remembered automatically — closing the tab clears them, same as every other field here. Save downloads a small file with your name/tagline/eyebrow/background/themes; Load reads one back in. Keep the file somewhere handy and reload it each time instead of retyping.</p>
         </div>
       </fieldset>
 
       <fieldset>
         <legend>3 · Options</legend>
-        <div class="field">
-          <label>Generate artwork?</label>
-          <div class="radio-row">
-            <label class="radio-opt"><input type="radio" name="genArt" value="yes" checked> Yes</label>
-            <label class="radio-opt"><input type="radio" name="genArt" value="no"> No</label>
-          </div>
-          <p class="hint">Downloadable .png in the same visual style used across this tool family. <b>Only works in Claude</b> with Code execution and file creation enabled — ChatGPT and most other chat tools have no equivalent way to run this from a pasted prompt, so no image will come back if you paste this there, regardless of wording.</p>
-        </div>
         <div class="field">
           <label>Generate hashtags?</label>
           <div class="radio-row">
@@ -207,17 +230,28 @@
           </div>
         </div>
         <div class="field">
-          <label>End the post with a question?</label>
+          <label>Generate artwork for whichever I end up choosing?</label>
           <div class="radio-row">
-            <label class="radio-opt"><input type="radio" name="genQuestion" value="yes"> Yes</label>
-            <label class="radio-opt"><input type="radio" name="genQuestion" value="no" checked> No</label>
+            <label class="radio-opt"><input type="radio" name="genArt" value="yes" checked> Yes</label>
+            <label class="radio-opt"><input type="radio" name="genArt" value="no"> No</label>
           </div>
-          <p class="hint">Off by default — a question at the end drives comments, but overusing it across every post starts to read as engagement-bait. Turn it on deliberately when you want to space one in.</p>
+          <p class="hint">Artwork is generated as a separate follow-up step, only for the one post you actually pick — not for all 6 drafts upfront. Downloadable .png in the same visual style used across this tool family. <b>Only works in Claude</b> with Code execution and file creation enabled.</p>
+        </div>
+        <div class="field">
+          <label>Output format</label>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="outputFormat" value="table" checked> Table in chat</label>
+            <label class="radio-opt"><input type="radio" name="outputFormat" value="docx"> Downloadable Word document</label>
+          </div>
+          <p class="hint">A Word doc gives you all 3 articles × 2 variants laid out for offline comparison — useful if you want to review away from the chat before picking.</p>
         </div>
       </fieldset>
 
       <div class="banner">
-        <b>Built-in honesty guardrails, not optional:</b> only real, verifiable articles with real URLs — no invented sources. Every summary is written fresh in Claude's own words, never copied from the source. If genuinely on-brand, recent, free-to-read articles are thin on a given day, the tool says so rather than padding the list to fill 3 slots.
+        <b>Built-in honesty guardrails, not optional:</b> only real, verifiable articles with real URLs — no invented sources. Every summary is written fresh in Claude's own words, never copied from the source. If genuinely on-brand, recent, free-to-read articles are thin on a given day, the tool reports fewer than 3 and says so rather than padding the list.
+      </div>
+      <div class="banner">
+        <b>The Position/Stance variant stays grounded too:</b> it only draws on the background/themes you actually gave it. With nothing given, it stays more general commentary rather than inventing a personal claim, credential, or experience to sound more authoritative.
       </div>
     </div>
   </div>
@@ -249,27 +283,72 @@ function recencyLabel(v){
   return 'published within the last 3 days';
 }
 
+// ---------- Save / Load brand identity (file-based, no browser storage) ----------
+document.getElementById('saveBrandBtn').addEventListener('click', () => {
+  const data = {
+    brandName: val('brandName'),
+    brandTagline: val('brandTagline'),
+    eyebrow: val('eyebrow'),
+    background: val('background'),
+    themes: val('themes'),
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'linkedin_brand_identity.json';
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('loadBrandBtn').addEventListener('click', () => {
+  document.getElementById('loadBrandFile').click();
+});
+
+document.getElementById('loadBrandFile').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    try {
+      const data = JSON.parse(evt.target.result);
+      document.getElementById('brandName').value = data.brandName || '';
+      document.getElementById('brandTagline').value = data.brandTagline || '';
+      document.getElementById('eyebrow').value = data.eyebrow || '';
+      document.getElementById('background').value = data.background || '';
+      document.getElementById('themes').value = data.themes || '';
+      render();
+    } catch(err) {
+      alert('Could not read that file — make sure it\'s a brand identity file previously saved from this tool.');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = ''; // allow reloading the same file again later
+});
+
 function buildPrompt(){
   const keywords = val('keywords');
   const recency = radioVal('recency');
   const audience = val('audience');
   const sources = val('sources');
   const recentTopics = val('recentTopics');
+  const themes = val('themes');
   const brandName = val('brandName') || '[your name]';
   const brandTagline = val('brandTagline') || '[your tagline]';
   const eyebrow = val('eyebrow') || 'WORTH YOUR ATTENTION';
-  const genArt = radioVal('genArt') !== 'no';
+  const background = val('background');
   const genHashtags = radioVal('genHashtags') !== 'no';
-  const genQuestion = radioVal('genQuestion') === 'yes';
+  const genArt = radioVal('genArt') !== 'no';
+  const outputFormat = radioVal('outputFormat');
 
   if(!keywords){
     return null;
   }
 
   let lines = [];
-  lines.push(`EXECUTE THIS NOW — do not ask me clarifying questions and do not respond with a plan, an outline, or a list of "things I'll need to know first." Everything you need is below. Where something genuinely isn't specified, make the most reasonable assumption yourself, note the assumption briefly in one line, and proceed. Search the web now and produce Step 1 in this same response.`);
+  lines.push(`EXECUTE THIS NOW — do not ask me clarifying questions and do not respond with a plan, an outline, or a list of "things I'll need to know first." Everything you need is below. Where something genuinely isn't specified, make the most reasonable assumption yourself, note the assumption briefly in one line, and proceed. Search the web now and produce Step 1 in full, in this same response.`);
   lines.push("");
-  lines.push(`I want you to find real, current articles worth sharing on LinkedIn, matched to my brand, and draft the post (and optionally the artwork) for the best one.`);
+  lines.push(`I want you to find real, current articles worth sharing on LinkedIn, matched to my brand, and draft two genuinely different post options for each of the top 3 — I'll pick my favorite of the 6 myself, so give me real choices, not one draft to approve.`);
   lines.push("");
   lines.push(`- Brand keywords/topics: ${keywords}`);
   lines.push(`- Recency: only consider articles ${recencyLabel(recency)}.`);
@@ -278,19 +357,29 @@ function buildPrompt(){
   if(recentTopics){
     lines.push(`- Already covered recently (don't repeat these or something too similar): ${recentTopics}`);
   }
+  if(themes){
+    lines.push(`- Ongoing themes I'm building a position on: ${themes} — favor articles that let me connect to one of these throughlines where a genuine connection exists, rather than treating every pick as a one-off.`);
+  }
+  if(background){
+    lines.push(`- My background/expertise:`);
+    lines.push(background);
+  } else {
+    lines.push(`- My background/expertise: not given — keep the Position/Stance variant below more general and analytical rather than inventing a personal claim, credential, or specific experience I haven't told you about.`);
+  }
 
   lines.push("");
-  lines.push(`CRITICAL — read before responding: only report real, verifiable, currently findable articles, each with a real working URL. Never invent an article, a source, or a URL. For each candidate, make a good-faith check on whether it's free to read (not hard-paywalled) and say so plainly — flag it as "likely free" or "uncertain" rather than asserting certainty you can't actually verify. If genuinely on-brand, recent, free-to-read articles are thin today, report fewer than 5 and say so honestly rather than padding the list with weak or off-brand picks.`);
+  lines.push(`CRITICAL — read before responding: only report real, verifiable, currently findable articles, each with a real working URL. Never invent an article, a source, or a URL. For each candidate, make a good-faith check on whether it's free to read (not hard-paywalled) and say so plainly — flag it as "likely free," "paywalled," or "uncertain" rather than asserting certainty you can't actually verify. If genuinely on-brand, recent, free-to-read articles are thin today, report fewer than 3 and say so honestly rather than padding the list with weak or off-brand picks.`);
   lines.push("");
   lines.push(`Also treat these as hard requirements:`);
-  lines.push(`- The picks must be distinct stories, not the same underlying event covered by multiple outlets. If your search turns up near-duplicate coverage of one story, note that explicitly and either pick the best single source for it or substitute a genuinely different story for the other slot(s).`);
+  lines.push(`- The 3 picks must be distinct stories, not the same underlying event covered by multiple outlets. If your search turns up near-duplicate coverage of one story, note that explicitly and substitute a genuinely different story rather than quietly presenting several versions of the same news.`);
   lines.push(`- Every summary must be written fresh in your own words — never copied or lightly reworded from the source text.`);
   lines.push(`- No markdown formatting (no asterisks, no pound signs, etc.) anywhere in the output — LinkedIn doesn't render markdown, so it would show up as literal stray characters. Plain text only.`);
+  lines.push(`- Do not invent anything about me beyond what I've actually told you above — the Position/Stance variant leans on real background/themes if given, and stays general if not, but never fabricates a claim, credential, or experience either way.`);
 
   lines.push("");
-  lines.push(`Step 1 — find candidates, rank them yourself, and present the top 5 in ranked order (best first). Do the ranking automatically using these criteria, weighed together rather than any single one deciding it: (a) how directly the article's actual content matches my brand keywords/topics above, not just a surface keyword hit; (b) recency within the window given; (c) source quality/credibility; (d) likely shareability — would this genuinely prompt a reaction or discussion from ${audience || 'my professional network'}; (e) distinctiveness from the other candidates and from what I've already posted recently. Briefly state the rank order logic in one line before listing them.`);
+  lines.push(`Step 1 — find candidates, rank them yourself, and narrow to the top 3 (not 5 — this tool intentionally works with fewer, more fully-developed options rather than a longer list of thin ones). Do the ranking automatically using these criteria, weighed together rather than any single one deciding it: (a) how directly the article's actual content matches my brand keywords/topics above, not just a surface keyword hit; (b) recency within the window given; (c) source quality/credibility; (d) likely shareability — would this genuinely prompt a reaction or discussion from ${audience || 'my professional network'}; (e) distinctiveness from the other candidates and from what I've already posted recently. Briefly state the rank order logic in one line before listing them.`);
   lines.push("");
-  lines.push(`For EACH of the 5 candidates, use this exact two-part format so it's easy to scan and copy:`);
+  lines.push(`For EACH of the 3 candidates, present:`);
   lines.push("");
   lines.push(`[Context — for you to read, not to copy]`);
   lines.push(`Headline: ...`);
@@ -298,40 +387,45 @@ function buildPrompt(){
   lines.push(`Free-to-read: Likely free / Paywalled / Uncertain`);
   lines.push(`Why it ranked here: one line, referencing the actual keywords/angle that made it relevant`);
   lines.push("");
-  lines.push(`[Ready to copy]`);
+  lines.push(`Then BOTH of these fully drafted post variants for this article — not a summary of what they'd contain, the actual finished text for each:`);
+  lines.push("");
+  lines.push(`Variant A — Informational Share:`);
   lines.push(`URL: <the article URL, alone on its own line>`);
-  lines.push(`Summary: <one sentence, LinkedIn-post-ready, written fresh in your own words, no markdown>`);
+  lines.push(`Post: <a short, factual summary in your own words — typically one sentence, never more than two — with little to no personal commentary. This is the safe, high-frequency default: genuinely useful information, not a stance. End on a statement, not a question.>`);
   if(genHashtags){
-    lines.push(`Hashtags: <3-5 relevant hashtags for this specific article, generated from its actual content and my brand keywords above, space-separated on one line>`);
+    lines.push(`Hashtags: <3-5 hashtags for this specific article, generated from its actual content and my brand keywords, space-separated on one line>`);
   }
-  lines.push(`Keep the "Ready to copy" block exactly three lines (URL, then Summary, then Hashtags) with no extra commentary mixed in, so I can select and paste just that block directly.`);
+  lines.push("");
+  lines.push(`Variant B — Position/Stance:`);
+  lines.push(`URL: <the article URL, alone on its own line>`);
+  lines.push(`Post: <a real take grounded strictly in my background/themes above (agree, disagree, extend the argument, connect it to a pattern, make a prediction — an actual position, not just a reaction), with the article's core point folded in tightly rather than presented as a separate summary. Close on a genuine, specific question OR a strong statement — whichever is rhetorically the stronger move for THIS particular take, decided deliberately rather than defaulting to one or the other out of habit.>`);
+  if(genHashtags){
+    lines.push(`Hashtags: <3-5 hashtags for this specific article, this time drawing from BOTH the article's content AND my broader background/themes above — the goal is hashtags that help build a recognizable community of interest around my actual expertise over time, not just tags for one article in isolation>`);
+  }
+  lines.push("");
+  lines.push(`Keep every "Post" block as clean, ready-to-copy plain text — URL, then Post, then Hashtags, no extra commentary mixed into those specific lines.`);
 
   lines.push("");
-  lines.push(`Step 2 — once I tell you which of the 5 to use, draft the actual LinkedIn post using this same "Ready to copy" shape, expanded slightly:`);
-  lines.push(`URL: <article URL>`);
-  lines.push(`Post: <a short personal hook/take in your own angle, then a one-sentence summary in your own words, combined into one tight LinkedIn-ready paragraph — no markdown>`);
-  if(genHashtags){
-    lines.push(`Hashtags: <the same hashtags already generated for this article in Step 1 — reuse them rather than regenerating a different set>`);
-  }
-  if(genQuestion){
-    lines.push(`End the "Post" line with a genuine, specific question related to the article — not a generic "what do you think?" tacked on, something that actually invites a substantive reply.`);
-  } else {
-    lines.push(`End the "Post" line on a statement, not a question — do not add a "what are your thoughts?" style closer.`);
-  }
-  lines.push(`Present this as plain text, in that exact URL / Post / Hashtags order, ready to copy straight into LinkedIn's post box.`);
-
+  lines.push(`Once I tell you which of the 6 drafts (3 articles × 2 variants) I want to use, that's the one I'm posting — no further drafting needed unless I ask for changes.`);
   if(genArt){
     lines.push("");
-    lines.push(`Step 3 — also build a downloadable artwork image (.png, 1200x630) for this post, matching this exact visual template. (Note: this step requires an environment with code execution and file creation, i.e. Claude with those capabilities enabled — if you are not able to execute code and save a real file, say so plainly instead of describing an image that won't actually exist as a file.)`);
+    lines.push(`Step 2 — once I've told you which draft I'm using, build a downloadable artwork image (.png, 1200x630) for that specific post, matching this exact visual template. (Note: this step requires an environment with code execution and file creation, i.e. Claude with those capabilities enabled — if you are not able to execute code and save a real file, say so plainly instead of describing an image that won't actually exist as a file.)`);
     lines.push(`- Dark navy background (#0f2d3d to #0a1f2b gradient) with a subtle hexagon line pattern overlay, and a teal-to-blue gradient accent bar (#0f9b8e to #1b6fa8) across the very top edge.`);
     lines.push(`- Eyebrow text, top left, teal (#0f9b8e), bold, letter-spaced: "${eyebrow}"`);
     lines.push(`- Subtitle beneath it, smaller, lighter blue (#7fa8bd): "${brandTagline} — Shared Read"`);
-    lines.push(`- Below that, a bold white headline (2 lines max) using the personal hook/take from Step 2 — reworded to fit as a short punchy headline if needed`);
+    lines.push(`- Below that, a bold white headline (2 lines max) built from the chosen post's actual content — its take if Variant B, or its core point if Variant A — reworded to fit as a short punchy headline if needed`);
     lines.push(`- A thin teal divider line`);
-    lines.push(`- A bordered card containing the one-sentence article summary in light text, plus a smaller line below it noting the source and "Free to read" status`);
+    lines.push(`- A bordered card containing the article's core point in light text, plus a smaller line below it noting the source and "Free to read" status`);
     lines.push(`- If hashtags were generated, small rounded pill shapes along the bottom of the card area showing 3-4 of them`);
     lines.push(`- Footer, bottom left: "${brandName}" in bold, "${brandTagline}" beneath it in lighter text`);
     lines.push(`CRITICAL — build this using your code execution environment, not just a description: use Python's Pillow (PIL) library to draw the image directly onto a 1200x630 canvas (Image.new + ImageDraw) — rectangles and rounded-rectangles for the background/accent bar/card/pills, ImageDraw.text (or textbbox for sizing) for all text elements, using a standard font bundled with the system or a common one you load explicitly. If Pillow isn't already available, install it first (pip install Pillow --break-system-packages). Do not stop at generating SVG or HTML code alone, and do not just describe the design in words — actually render the pixels and save a real .png file to /mnt/user-data/outputs/, then confirm in your response that the file was created and is available to download. If you hit a rendering error, fix it and retry rather than falling back to only describing what the image would look like.`);
+  }
+
+  lines.push("");
+  if(outputFormat === 'docx'){
+    lines.push(`Format Step 1's output as a downloadable Word document (.docx) — one section per article (context, then Variant A, then Variant B), clearly labeled and visually separated so all 3 articles and 6 drafts are easy to compare side by side. Once I tell you which draft I'm using${genArt ? ' and the artwork is built' : ''}, that confirmation can just be a normal chat reply — it doesn't need its own document.`);
+  } else {
+    lines.push(`Present Step 1 directly in your response, organized by article with both variants clearly labeled underneath each one.`);
   }
 
   return lines.join("\n");
