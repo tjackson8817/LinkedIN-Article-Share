@@ -18,7 +18,7 @@ This tool is a single web page (linkedin_article_share.html) that finds the top 
 | Setting | Why you need it / Where to find it |
 |---|---|
 | Web search | Required — the entire tool depends on live search for real, current articles. |
-| Code execution and file creation | Needed if artwork generation is on, or if you choose the downloadable Word document output format. |
+| Code execution and file creation | Always needed — Step 1's text always comes back as a downloadable Word document, and artwork generation (if used) needs it too. |
 
 The tool works with any AI chat tool that can browse the web — but artwork generation is Claude-specific. ChatGPT and most other tools have no equivalent way to execute code and hand back a real downloadable file from a pasted prompt, so pasting this into ChatGPT with artwork on will produce text but no image, regardless of wording.
 
@@ -49,7 +49,8 @@ This is the sixth tool in the family, but it doesn't sit in the job-search funne
 |---|---|---|
 | Generate hashtags? | Yes | 3-5 hashtags per variant. On the Informational variant, drawn from the article's content and your brand keywords. On the Position/Stance variant, drawn from **both the article and your background/themes**, deliberately — the goal is hashtags that build a recognizable community of interest around your actual expertise over time, not just tags for one article in isolation. |
 | Generate artwork for whichever I end up choosing? | Yes | A downloadable `.png` (1200×630), generated as a separate follow-up step scoped to just the one post you pick — not all 6 drafts upfront. Claude only, requires Code execution and file creation. |
-| Output format | Table in chat | The alternative, Downloadable Word document, lays out all 3 articles × 2 variants for offline comparison before you pick. |
+
+Step 1's text always comes back as a downloadable Word document — there's no table-in-chat option anymore. It lays out all 3 articles × 2 variants for offline comparison before you pick.
 
 There's no longer a standalone "end with a question?" toggle. That judgment is now made per-take inside the Position/Stance variant itself — the model decides, for that specific point of view, whether a genuine question or a strong statement is the more effective close, rather than a single global setting applied to every post regardless of content.
 
@@ -77,18 +78,16 @@ That's 6 fully drafted posts in one response — not 3 teasers waiting for you t
 
 **Follow-up, once you've picked one:** if artwork is enabled, tell the model which of the 6 you're using, and it builds the matching image for that post specifically, following the exact visual template embedded in the prompt (colors, layout, your brand identity fields). This step only produces a real file in Claude with code execution enabled.
 
-## 6. Output Format
+## 6. Output
 
-- **Table in chat** (default) — all 3 articles and 6 drafts presented directly in the response.
-- **Downloadable Word document** — the same content, laid out for offline comparison: one section per article, Variant A then Variant B, clearly labeled.
-- **The artwork** (if enabled) — always a separate, real downloadable `.png`, regardless of which format you chose for the text.
+Step 1's text always comes back as a **downloadable Word document (.docx)** — there's no table-in-chat option anymore. One section per article, Variant A then Variant B, clearly labeled, laid out for offline comparison. **The artwork** (if enabled) comes through separately as a real downloadable `.png`.
 
 ## 7. Typical Workflow, Start to Finish
 
 1. Fill in your brand keywords and recency window.
 2. Fill in your brand identity — or load a previously saved one.
 3. Optionally add your background/expertise and ongoing themes.
-4. Set your toggles — hashtags, artwork, output format.
+4. Set your toggles — hashtags, artwork.
 5. Copy the generated prompt, paste it into a new Claude chat.
 6. Review all 6 drafts (3 articles × 2 variants); pick your favorite.
 7. If artwork is on, tell the model which one you're using and review the image before posting.

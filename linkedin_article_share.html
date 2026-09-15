@@ -237,14 +237,7 @@
           </div>
           <p class="hint">Artwork is generated as a separate follow-up step, only for the one post you actually pick — not for all 6 drafts upfront. Downloadable .png in the same visual style used across this tool family. <b>Only works in Claude</b> with Code execution and file creation enabled.</p>
         </div>
-        <div class="field">
-          <label>Output format</label>
-          <div class="radio-row">
-            <label class="radio-opt"><input type="radio" name="outputFormat" value="table" checked> Table in chat</label>
-            <label class="radio-opt"><input type="radio" name="outputFormat" value="docx"> Downloadable Word document</label>
-          </div>
-          <p class="hint">A Word doc gives you all 3 articles × 2 variants laid out for offline comparison — useful if you want to review away from the chat before picking.</p>
-        </div>
+        <p class="hint" style="margin-top:2px;">Step 1's text always comes back as a downloadable Word document (.docx) — one section per article (context, then Variant A, then Variant B), clearly labeled and visually separated so all 3 articles and 6 drafts are easy to compare side by side. Requires Code execution and file creation.</p>
       </fieldset>
 
       <div class="banner">
@@ -339,7 +332,6 @@ function buildPrompt(){
   const background = val('background');
   const genHashtags = radioVal('genHashtags') !== 'no';
   const genArt = radioVal('genArt') !== 'no';
-  const outputFormat = radioVal('outputFormat');
 
   if(!keywords){
     return null;
@@ -422,11 +414,7 @@ function buildPrompt(){
   }
 
   lines.push("");
-  if(outputFormat === 'docx'){
-    lines.push(`Format Step 1's output as a downloadable Word document (.docx) — one section per article (context, then Variant A, then Variant B), clearly labeled and visually separated so all 3 articles and 6 drafts are easy to compare side by side. Once I tell you which draft I'm using${genArt ? ' and the artwork is built' : ''}, that confirmation can just be a normal chat reply — it doesn't need its own document.`);
-  } else {
-    lines.push(`Present Step 1 directly in your response, organized by article with both variants clearly labeled underneath each one.`);
-  }
+  lines.push(`Format Step 1's output as a downloadable Word document (.docx) — one section per article (context, then Variant A, then Variant B), clearly labeled and visually separated so all 3 articles and 6 drafts are easy to compare side by side. Once I tell you which draft I'm using${genArt ? ' and the artwork is built' : ''}, that confirmation can just be a normal chat reply — it doesn't need its own document.`);
 
   return lines.join("\n");
 }

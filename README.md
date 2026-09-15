@@ -19,7 +19,6 @@ If you used an earlier version: the shape of the output changed meaningfully, no
 - **New: Your background/expertise field.** Grounds the Position/Stance variant in something real instead of generic commentary or — worse — an invented personal claim.
 - **New: Ongoing themes field.** Thought leadership compounds across posts connected to a few recognizable throughlines, not one-off reactions.
 - **Removed the false "set once, reused every time" promise.** Your brand identity fields were never actually persisted — closing the tab cleared them, exactly like every other field. Replaced with a real **Save/Load brand identity** file (a small `.json` you keep and reload), which actually does what the old label claimed.
-- **New: Output format choice** — table in chat, or a downloadable Word document with all 3 articles × 2 variants laid out for offline comparison.
 - **Removed the standalone "end with a question?" toggle** — folded into the Position/Stance variant's own judgment instead (it decides, per take, whether a question or a statement is the stronger close, rather than a global on/off switch).
 - **Artwork moved to a separate follow-up step**, scoped to just the one post you actually pick, not generated for all 6 drafts upfront.
 - Fixed a stale reference in the honesty-guardrail copy that mismatched the actual candidate count, and added mobile responsiveness and proper label accessibility, matching the rest of this tool family.
@@ -29,7 +28,7 @@ If you used an earlier version: the shape of the output changed meaningfully, no
 | Setting | Why you need it | Where to find it |
 |---|---|---|
 | **Web search** | Required — the entire tool depends on live search for real, current articles. | Click the **+** (or slider) icon in the chat input, find **Web search**, toggle it on. |
-| **Code execution and file creation** | Only needed if artwork generation is used, or if you choose the downloadable Word document output. | **Settings → Capabilities**, toggle it on. |
+| **Code execution and file creation** | Always needed — Step 1's text always comes back as a downloadable Word document, and artwork generation (if used) needs it too. | **Settings → Capabilities**, toggle it on. |
 
 The tool works with any AI chat tool that can browse the web — but **artwork generation is Claude-specific.** ChatGPT and most other tools have no equivalent way to execute code and hand back a real downloadable file from a pasted prompt.
 
@@ -38,7 +37,7 @@ The tool works with any AI chat tool that can browse the web — but **artwork g
 1. Open `linkedin_article_share.html`.
 2. Fill in your brand keywords and recency window.
 3. Fill in your name/tagline/eyebrow, and optionally your background and ongoing themes — or load a previously saved brand identity file.
-4. Set your toggles — hashtags, artwork, output format.
+4. Set your toggles — hashtags, artwork.
 5. Copy the generated prompt and paste it into a new Claude chat.
 6. Review all 3 articles × 2 variants (6 drafts), pick your favorite, and request artwork for it if you want it.
 
@@ -58,6 +57,6 @@ Only real, verifiable, currently findable articles with real URLs — never an i
 ## Notes
 
 - This repo can be public or private — GitHub Pages on the free tier requires a public repo (or a paid plan for private-repo Pages).
-- Requires web search capability in whatever AI chat tool runs the prompt, and Claude's Code execution and file creation specifically for artwork or the Word document output.
+- Requires web search capability in whatever AI chat tool runs the prompt, and Claude's Code execution and file creation — always, since every result now comes back as a downloadable Word document, and for artwork generation too.
 - The generated prompt opens with an explicit "execute this now — don't ask clarifying questions, don't just outline a plan" instruction, aimed at AI tools that sometimes respond with questions or recommendations instead of just running the task.
 - Brand identity (name, tagline, eyebrow, background, themes) is not saved automatically anywhere — use the Save/Load buttons and keep the downloaded `.json` file somewhere you'll find it again.
